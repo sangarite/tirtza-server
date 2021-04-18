@@ -5,8 +5,9 @@ const bcrypt = require('bcrypt');
 const cors = require('cors');
 
 const login = require('./controllers/login');
-const register = require('./controllers/register')
+const register = require('./controllers/register');
 const pictures = require('./controllers/pictures');
+const pedigree = require('./controllers/pedigree');
 
 var storage = multer.diskStorage({
   destination: './uploads',
@@ -42,6 +43,9 @@ app.post('/pictures', function(req, res) {res.send('image inserted')});
 app.post('/addpicture', pictures.addPictures(connection, sql));
 app.post('/register', register.handleRegister(connection, sql, bcrypt));
 app.get('/pictures/:group', pictures.getPictures(connection, sql));
+app.get('/pedigree/:group', pedigree.getPedigree(connection, sql));
+app.post('/pedigree', pedigree.updatePedigree(connection, sql));
+app.post('/createPedigree', pedigree.createPedigree(connection, sql));
 app.get('/', (req, res) => {res.send('You are at Link Me')});
 
 app.listen(port, () => {

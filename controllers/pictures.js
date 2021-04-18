@@ -9,7 +9,7 @@ const addPictures = (connection, sql) => (req, res) => {
             connection.close();
         })
         .catch(err => {
-            console.log('could not insert image');
+            console.log(err, 'could not insert image');
             connection.close();
         })
     })
