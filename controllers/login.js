@@ -25,8 +25,7 @@ const handleLogin = (connection, sql, bcrypt) => (req, res) => {
         console.log(password);
         console.log(result.recordset[0].Password);
         bcrypt.compare(password, result.recordset[0].Password, (err, valid) => {
-          console.log(valid, 'vaild');
-          if (err) notFound();
+          if (err || !valid) notFound();
           else {res.send(result.recordset[0]); console.log(result.recordset[0]);}
         })
       }
