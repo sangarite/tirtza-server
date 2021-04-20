@@ -8,6 +8,7 @@ const login = require('./controllers/login');
 const register = require('./controllers/register');
 const pictures = require('./controllers/pictures');
 const pedigree = require('./controllers/pedigree');
+const group = require('./controllers/group');
 
 var storage = multer.diskStorage({
   destination: './uploads',
@@ -46,6 +47,7 @@ app.get('/pictures/:group', pictures.getPictures(connection, sql));
 app.get('/pedigree/:group', pedigree.getPedigree(connection, sql));
 app.post('/pedigree', pedigree.updatePedigree(connection, sql));
 app.post('/createPedigree', pedigree.createPedigree(connection, sql));
+app.get('/group/:group', group.getGroupName(connection, sql));
 app.get('/', (req, res) => {res.send('You are at Link Me')});
 
 app.listen(port, () => {
