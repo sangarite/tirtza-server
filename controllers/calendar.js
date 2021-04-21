@@ -1,12 +1,13 @@
 const addEvent = (connection, sql) => (req, res) => {
-    const { name, group,date } = req.body;
+    const { name, group, date } = req.body;
+    console.log(req.body)
     connection.connect()
     .then(() => {
         const request = new sql.Request(connection);
-        request.query(`INSERT INTO Events (GroupId, EventName,EventDate) VALUES (${group},N'${name}',${date})`)
+        request.query(`INSERT INTO Events (GroupId, EventName, EventDate) VALUES (${group}, N'${name}', '${date}')`)
         .then(result => { 
             console.log('event inserted')
-            res.send('event inserted');
+            res.send({"message":'event inserted'});
             connection.close();
         })
         .catch(err => {
@@ -18,13 +19,13 @@ const addEvent = (connection, sql) => (req, res) => {
 }
 
 const RemoveEvent = (connection, sql) => (req, res) => {
-    const { eventId } = req.body;
+    const { eventId, groupId } = req.body;
     connection.connect()
     .then(() => {
         const request = new sql.Request(connection);
-        request.query(`DELETE FROM Events WHERE EventId=${req.body.group}`)
+        request.query(`DELETE FROM Events WHERE EventId=${eventId} AND groupId=${groupId}`)
         .then(result => { 
-            res.send('event remove');
+            res.send({"message":'event remove'});
             connection.close();
         })
         .catch(err => {
@@ -35,14 +36,14 @@ const RemoveEvent = (connection, sql) => (req, res) => {
     .catch(err => console.log('could not connect to the server'))
 }
 
-const UpdateEvent= (connection, sql) => (req, res) => {
-    const { date } = req.body;
+const UpdateEvent = (connection, sql) => (req, res) => {
+    const { date, groupId } = req.body;
     connection.connect()
     .then(() => {
         const request = new sql.Request(connection);
-        request.query(`UPDATE Events SET EventDate = ${date} WHERE groupId=${req.body.group}`)
+        request.query(`UPDATE Events SET EventDate = '${date}' WHERE groupId=${groupId}`)
         .then(result => { 
-            res.send('event update');
+            res.send({"message":'event update'});
             connection.close();
         })
         .catch(err => {
@@ -54,7 +55,7 @@ const UpdateEvent= (connection, sql) => (req, res) => {
 }
 
 
-const getEvent = (connection, sql) => (req, res) => {
+const getEvents = (connection, sql) => (req, res) => {
     const group = req.params.group;
     connection.connect()
     .then(() => {
@@ -75,7 +76,7 @@ const getEvent = (connection, sql) => (req, res) => {
 
 module.exports = { 
     addEvent: addEvent,
-    getEvent: getEvent,
+    getEvents: getEvents,
     RemoveEvent:RemoveEvent,
     UpdateEvent:UpdateEvent
 };

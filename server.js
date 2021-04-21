@@ -48,10 +48,10 @@ app.get('/pedigree/:group', pedigree.getPedigree(connection, sql));
 app.post('/pedigree', pedigree.updatePedigree(connection, sql));
 app.post('/createPedigree', pedigree.createPedigree(connection, sql));
 app.get('/group/:group', group.getGroupName(connection, sql));
-app.get('/calendar/:group', calendar.getEvent(connection, sql));
-app.post('/calendar', calendar.UpdateEvent(connection, sql));
-app.post('/calendar', calendar.addEvent(connection, sql));
-app.post('/calendar', calendar.RemoveEvent(connection, sql));
+app.get('/calendar/:group', calendar.getEvents(connection, sql));
+app.post('/calendar/updateEvent', calendar.UpdateEvent(connection, sql));
+app.post('/calendar/addEvent', calendar.addEvent(connection, sql));
+app.post('/calendar/removeEvent', calendar.RemoveEvent(connection, sql));
 app.get('/', (req, res) => {res.send('You are at Link Me')});
 
 app.listen(port, () => {
