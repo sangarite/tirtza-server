@@ -41,13 +41,12 @@ const handleRegister = (connection, sql, bcrypt) => (req, res) => {
     let { firstName, lastName, id, birthday, email, password, groupName, groupId } = req.body;
 
     console.log(req.body)
-    //check that the id is uniqe
 
     if (groupName) {
         connection.connect()
         .then(() => {
             const request = new sql.Request(connection);
-            request.query(`INSERT INTO [dbo].[Group] (GroupName) OUTPUT INSERTED.* VALUES ('${groupName}')`)
+            request.query(`INSERT INTO [dbo].[Group] (GroupName) OUTPUT INSERTED.* VALUES (N'${groupName}')`)
             .then((result) => {
                 connection.close();
                 groupId = result.recordset[0].GroupId;
