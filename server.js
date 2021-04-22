@@ -3,6 +3,7 @@ const sql = require('mssql');
 const multer = require('multer');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
+const nodemailer = require('nodemailer');
 
 const login = require('./controllers/login');
 const register = require('./controllers/register');
@@ -10,6 +11,8 @@ const pictures = require('./controllers/pictures');
 const pedigree = require('./controllers/pedigree');
 const group = require('./controllers/group');
 const calendar = require('./controllers/calendar');
+const sendInvetation = require('./controllers/sendInvetation');
+
 var storage = multer.diskStorage({
   destination: './uploads',
   filename: function (req, file, cb) {
@@ -37,6 +40,22 @@ const config = {
   }
 };
 
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'familink4@gmail.com',
+    pass: 'ohmwybkhvtukpfyu'
+  }
+});
+
+transporter.verify((error, success) => {
+  if (error) {
+    console.log('Err Transport',error);
+  } else {
+    console.log('All works fine, congratz!');
+  }
+});
+
 var connection = new sql.ConnectionPool(config);
 
 app.post('/login', login.handleLogin(connection, sql, bcrypt));
@@ -52,6 +71,7 @@ app.get('/calendar/:group', calendar.getEvents(connection, sql));
 app.post('/calendar/updateEvent', calendar.UpdateEvent(connection, sql));
 app.post('/calendar/addEvent', calendar.addEvent(connection, sql));
 app.post('/calendar/removeEvent', calendar.RemoveEvent(connection, sql));
+app.post('/sendInvetation', sendInvetation.sendInvetation(transporter));
 app.get('/', (req, res) => {res.send('You are at Link Me')});
 
 app.listen(port, () => {
