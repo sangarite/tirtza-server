@@ -13,6 +13,7 @@ const getPedigree = (connection, sql) => (req, res) => {
         })
         .catch(err => {
             console.log('could not find tree\n', err);
+            res.send(err);
             connection.close();
         })
     })
