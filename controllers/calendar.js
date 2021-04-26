@@ -1,10 +1,10 @@
 const addEvent = (connection, sql) => (req, res) => {
-    const { name, group, date } = req.body;
+    const { EventId,name, group, date } = req.body;
     console.log(req.body)
     connection.connect()
     .then(() => {
         const request = new sql.Request(connection);
-        request.query(`INSERT INTO Events (GroupId, EventName, EventDate) VALUES (${group}, N'${name}', '${date}')`)
+        request.query(`INSERT INTO Events (EventId,GroupId, EventName, EventDate) VALUES ('${EventId}',${group}, N'${name}', '${date}')`)
         .then(result => { 
             console.log('event inserted')
             res.send({"message":'event inserted'});
@@ -22,8 +22,9 @@ const RemoveEvent = (connection, sql) => (req, res) => {
     const { eventId, groupId } = req.body;
     connection.connect()
     .then(() => {
+        console.log(eventId)
         const request = new sql.Request(connection);
-        request.query(`DELETE FROM Events WHERE EventId=${eventId} AND groupId=${groupId}`)
+        request.query(`DELETE FROM Events WHERE EventId='${eventId}' AND groupId=${groupId}`)
         .then(result => { 
             res.send({"message":'event remove'});
             connection.close();
@@ -37,11 +38,12 @@ const RemoveEvent = (connection, sql) => (req, res) => {
 }
 
 const UpdateEvent = (connection, sql) => (req, res) => {
-    const { newDate,date, groupId } = req.body;
+    const { newDate,EventId, groupId } = req.body;
     connection.connect()
     .then(() => {
+        console.log(EventId)
         const request = new sql.Request(connection);
-        request.query(`UPDATE Events SET EventDate = '${newDate}' WHERE (groupId=${groupId} AND EventDate='${date}')`)
+        request.query(`UPDATE Events SET EventDate = '${newDate}' WHERE (groupId=${groupId} AND EventId='${EventId}')`)
         .then(result => { 
             res.send({"message":'event update'});
             connection.close();
