@@ -1,5 +1,6 @@
 const addPictures = (connection, sql) => (req, res) => {
     const { name, group } = req.body;
+    console.log(req.body)
     connection.connect()
     .then(() => {
         const request = new sql.Request(connection);
