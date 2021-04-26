@@ -37,11 +37,11 @@ const RemoveEvent = (connection, sql) => (req, res) => {
 }
 
 const UpdateEvent = (connection, sql) => (req, res) => {
-    const { date, groupId } = req.body;
+    const { newDate,date, groupId } = req.body;
     connection.connect()
     .then(() => {
         const request = new sql.Request(connection);
-        request.query(`UPDATE Events SET EventDate = '${date}' WHERE groupId=${groupId}`)
+        request.query(`UPDATE Events SET EventDate = '${newDate}' WHERE (groupId=${groupId} AND EventDate='${date}')`)
         .then(result => { 
             res.send({"message":'event update'});
             connection.close();
